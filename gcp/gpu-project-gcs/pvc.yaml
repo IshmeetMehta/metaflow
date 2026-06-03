@@ -1,0 +1,33 @@
+# gcs-pvc.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gcs-dataset-pv
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "" # Must be empty for static provisioning
+  claimRef:
+    namespace: metaflow
+    name: csi-gcs-dataset-pvc
+  csi:
+    driver: gcsfuse.csi.storage.gke.io
+    volumeHandle: metaflow-cifar10-dataset
+    volumeAttributes:
+      gcsBucket: metaflow-cifar10-dataset
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: csi-gcs-dataset-pvc
+  namespace: metaflow
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: ""
+  volumeName: gcs-dataset-pv
