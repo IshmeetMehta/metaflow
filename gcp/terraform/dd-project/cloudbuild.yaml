@@ -1,0 +1,12 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'GCP_TOKEN=$_TOKEN'
+      - '-t'
+      - 'us-west1-docker.pkg.dev/platform-sandbox-495413/spsearch-qualitycheck-metaflow-image/sp-search-firelight-qualitycheck:v2'
+      - '.'
+
+images:
+  - 'us-west1-docker.pkg.dev/platform-sandbox-495413/spsearch-qualitycheck-metaflow-image/sp-search-firelight-qualitycheck:v2'

@@ -1,0 +1,78 @@
+# =====================================================================
+# RESOURCE 1: Main Data Lake Storage
+# Bucket: doordash-datalake-spsearchqualitycheck
+# Metaflow Key: doordash-datalake
+# =====================================================================
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: doordash-datalake-pv
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "doordash-gcs-fuse"
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: metaflow
+    name: doordash-datalake
+  mountOptions:
+    - implicit-dirs
+  csi:
+    driver: gcsfuse.csi.storage.gke.io
+    volumeHandle: doordash-datalake-spsearchqualitycheck
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: doordash-datalake
+  namespace: metaflow
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: "doordash-gcs-fuse"
+  volumeName: doordash-datalake-pv
+
+---
+# =====================================================================
+# RESOURCE 2: Temporary Data Lake Storage
+# Bucket: doordash-datalake-spsearchqualitycheck-temp
+# Metaflow Key: doordash-datalake-temp
+# =====================================================================
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: doordash-datalake-temp-pv
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "doordash-gcs-fuse"
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: metaflow
+    name: doordash-datalake-temp
+  mountOptions:
+    - implicit-dirs
+  csi:
+    driver: gcsfuse.csi.storage.gke.io
+    volumeHandle: doordash-datalake-spsearchqualitycheck-temp
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: doordash-datalake-temp
+  namespace: metaflow
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: "doordash-gcs-fuse"
+  volumeName: doordash-datalake-temp-pv
